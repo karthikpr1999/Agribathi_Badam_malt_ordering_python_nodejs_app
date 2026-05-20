@@ -1,0 +1,6 @@
+{
+  "_comment": "Edit prices here. No server restart needed — prices are read on every order.",
+  "AGRI_TUBE": 45.00,
+  "MASALA_250": 30.00,
+  "BADAM_200": 60.00
+}

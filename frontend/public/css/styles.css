@@ -1,0 +1,100 @@
+/* Custom overrides — Bootstrap handles the heavy lifting */
+
+body {
+  background-color: #f8f9fa;
+}
+
+/* Active nav link */
+.navbar .nav-link.active {
+  font-weight: 600;
+  border-bottom: 2px solid #fff;
+}
+
+/* Stat cards */
+.stat-card {
+  border-left: 4px solid #198754;
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,.06);
+}
+
+.stat-card .stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #198754;
+}
+
+.stat-card .stat-label {
+  font-size: 0.85rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* Order form product row */
+.product-row {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin-bottom: .75rem;
+  transition: box-shadow .15s;
+}
+
+.product-row:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.product-row .product-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.product-row .price-tag {
+  font-size: .85rem;
+  color: #6c757d;
+}
+
+.product-row .subtotal {
+  font-weight: 600;
+  color: #198754;
+  min-width: 80px;
+  text-align: right;
+}
+
+/* Total bar */
+.order-total-bar {
+  background: #e9f7ef;
+  border: 1px solid #b7dfca;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #155724;
+}
+
+/* History table */
+.history-table tbody tr {
+  cursor: pointer;
+}
+
+.history-table tbody tr:hover {
+  background-color: #f1fdf6;
+}
+
+.order-detail-row td {
+  background: #f8f9fa;
+  padding: .75rem 1.25rem;
+}
+
+/* Scrollable history container */
+.history-scroll {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+/* Price editor inputs */
+.price-input-group .input-group-text {
+  font-weight: 600;
+}

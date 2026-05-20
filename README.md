@@ -93,4 +93,4 @@ Or edit `config/prices.json` directly in Notepad. Changes take effect on the nex
 If either port is already in use, change it in:
 - Backend: `start_backend.bat` (the `--port 8000` argument) and `frontend/public/js/api.js` (`API_BASE`)
 - Frontend: `server.js` (`PORT = 3000`)
-# Agribathi_Badam_malt_ordering_python_nodejs_app
+# 
