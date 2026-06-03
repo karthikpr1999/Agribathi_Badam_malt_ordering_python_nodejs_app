@@ -108,7 +108,7 @@ async function loadStats() {
         const rows = data.today.items_by_product.map(item => {
           const rev = (item.total_qty * (skuPriceMap[item.sku] || 0)).toFixed(2);
           return `<tr>
-            <td class="fw-semibold">${item.product_name}</td>
+            <td class="fw-semibold">${escapeHtml(item.product_name)}</td>
             <td class="text-center">${item.total_qty}</td>
             <td class="text-end text-success fw-bold">&#8377;${Number(rev).toLocaleString('en-IN', {minimumFractionDigits:2})}</td>
           </tr>`;
@@ -148,7 +148,7 @@ async function loadStats() {
   } catch (err) {
     const todayCards = document.getElementById('today-stats-cards');
     if (todayCards) {
-      todayCards.innerHTML = `<div class="col-12"><div class="alert alert-danger">Failed to load stats: ${err.message}</div></div>`;
+      todayCards.innerHTML = `<div class="col-12"><div class="alert alert-danger">Failed to load stats: ${escapeHtml(err.message)}</div></div>`;
     }
   }
 }
@@ -211,6 +211,6 @@ async function loadPriceEditor() {
     });
 
   } catch (err) {
-    editor.innerHTML = `<div class="alert alert-danger">Failed to load prices: ${err.message}</div>`;
+    editor.innerHTML = `<div class="alert alert-danger">Failed to load prices: ${escapeHtml(err.message)}</div>`;
   }
 }

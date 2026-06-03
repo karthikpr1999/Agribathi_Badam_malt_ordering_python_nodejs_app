@@ -5,6 +5,15 @@
 
 const API_BASE = 'http://localhost:8000';
 
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
 async function _request(method, path, body = null) {
   const opts = {
     method,

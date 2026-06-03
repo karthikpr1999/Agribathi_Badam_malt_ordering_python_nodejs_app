@@ -1,6 +1,5 @@
 from datetime import datetime, date
-from decimal import Decimal
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 
 # ─── Products ──────────────────────────────────────────────────────────────
@@ -19,14 +18,7 @@ class ProductOut(BaseModel):
 
 class OrderItemCreate(BaseModel):
     product_id: int
-    quantity: float
-
-    @field_validator("quantity")
-    @classmethod
-    def qty_positive(cls, v: float) -> float:
-        if v <= 0:
-            raise ValueError("quantity must be greater than 0")
-        return v
+    quantity: float = Field(..., gt=0)
 
 
 class OrderItemOut(BaseModel):
@@ -43,9 +35,9 @@ class OrderItemOut(BaseModel):
 # ─── Orders ────────────────────────────────────────────────────────────────
 
 class OrderCreate(BaseModel):
-    customer_name: str
-    customer_phone: str
-    notes: str = ""
+    customer_name: str = Field(..., max_length=200)
+    customer_phone: str = Field(..., max_length=30)
+    notes: str = Field("", max_length=1000)
     items: list[OrderItemCreate]
 
     @field_validator("customer_name")
@@ -136,13 +128,6 @@ class PricesOut(BaseModel):
 
 
 class PricesUpdate(BaseModel):
-    AGRI_TUBE: float
-    MASALA_250: float
-    BADAM_200: float
-
-    @field_validator("AGRI_TUBE", "MASALA_250", "BADAM_200")
-    @classmethod
-    def price_positive(cls, v: float) -> float:
-        if v <= 0:
-            raise ValueError("price must be greater than 0")
-        return v
+    AGRI_TUBE: float = Field(..., gt=0)
+    MASALA_250: float = Field(..., gt=0)
+    BADAM_200: float = Field(..., gt=0)

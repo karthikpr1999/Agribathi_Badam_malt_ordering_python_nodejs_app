@@ -57,7 +57,7 @@ async function renderOrderForm() {
   } catch (err) {
     document.getElementById('product-rows').innerHTML = `
       <div class="alert alert-danger">
-        <i class="bi bi-exclamation-triangle"></i> Failed to load products: ${err.message}
+        <i class="bi bi-exclamation-triangle"></i> Failed to load products: ${escapeHtml(err.message)}
       </div>`;
     return;
   }
@@ -67,8 +67,8 @@ async function renderOrderForm() {
   rowsContainer.innerHTML = products.map(p => `
     <div class="product-row d-flex align-items-center gap-3 flex-wrap">
       <div class="flex-grow-1">
-        <div class="product-name">${p.name}</div>
-        <div class="price-tag">&#8377;${p.price.toFixed(2)} per ${p.unit_label}</div>
+        <div class="product-name">${escapeHtml(p.name)}</div>
+        <div class="price-tag">&#8377;${p.price.toFixed(2)} per ${escapeHtml(p.unit_label)}</div>
       </div>
       <div class="d-flex align-items-center gap-2">
         <label class="form-label mb-0 text-muted small">Qty (${p.unit_label})</label>

@@ -118,7 +118,7 @@ async function loadHistoryData() {
     renderHistoryTable(data.orders);
     renderPagination(data.total, data.page, data.limit);
   } catch (err) {
-    area.innerHTML = `<div class="alert alert-danger m-3">Error loading orders: ${err.message}</div>`;
+    area.innerHTML = `<div class="alert alert-danger m-3">Error loading orders: ${escapeHtml(err.message)}</div>`;
   }
 }
 
@@ -253,7 +253,7 @@ async function loadOrderDetail(orderId) {
       }
     });
   } catch (err) {
-    detailCell.innerHTML = `<div class="text-danger p-2">Failed to load order: ${err.message}</div>`;
+    detailCell.innerHTML = `<div class="text-danger p-2">Failed to load order: ${escapeHtml(err.message)}</div>`;
   }
 }
 
@@ -288,10 +288,3 @@ function renderPagination(total, page, limit) {
   });
 }
 
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
