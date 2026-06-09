@@ -3,7 +3,9 @@
  * Change API_BASE here if your backend runs on a different port.
  */
 
-const API_BASE = 'http://localhost:8000';
+// Use the same host the page was loaded from, but always port 8000.
+// This works for both localhost and EC2 (or any other host).
+const API_BASE = `${window.location.protocol}//${window.location.hostname}:8000`;
 
 function escapeHtml(str) {
   return String(str)

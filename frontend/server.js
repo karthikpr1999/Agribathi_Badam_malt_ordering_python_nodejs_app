@@ -5,6 +5,11 @@ const app = express();
 const PORT = 3000;
 
 app.use((req, res, next) => {
+  // Derive the backend origin from the incoming Host header so the CSP works
+  // on both localhost and remote hosts (e.g. EC2 public IP or domain).
+  const host = req.headers.host ? req.headers.host.split(':')[0] : 'localhost';
+  const backendOrigin = `http://${host}:8000`;
+
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
@@ -16,7 +21,7 @@ app.use((req, res, next) => {
       "style-src 'self' https://cdn.jsdelivr.net",
       "font-src 'self' https://cdn.jsdelivr.net",
       "img-src 'self' data:",
-      "connect-src 'self' http://localhost:8000",
+      `connect-src 'self' ${backendOrigin}`,
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
