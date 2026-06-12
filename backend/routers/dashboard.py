@@ -6,8 +6,10 @@ from database import get_db
 from models import Order, OrderItem, Product
 from schemas import DashboardStats, TodayStats, AllTimeStats, ProductStat, PricesOut, PricesUpdate
 from config_loader import load_prices, save_prices
+from logger import get_logger
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
+log = get_logger("dashboard")
 
 
 @router.get("/stats", response_model=DashboardStats)
@@ -81,5 +83,7 @@ def update_prices(payload: PricesUpdate):
         "MASALA_250": payload.MASALA_250,
         "BADAM_200": payload.BADAM_200,
     }
+    log.info("Prices updated: AGRI_TUBE=%.2f  MASALA_250=%.2f  BADAM_200=%.2f",
+             prices["AGRI_TUBE"], prices["MASALA_250"], prices["BADAM_200"])
     save_prices(prices)
     return PricesOut(**prices)

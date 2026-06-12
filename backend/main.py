@@ -1,7 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from routers import products, orders, dashboard
+from logger import get_logger
 import os
+import time
+
+log = get_logger("app")
 
 app = FastAPI(
     title="Agribathi & Badam Malt Order API",
@@ -29,6 +33,23 @@ app.include_router(orders.router)
 app.include_router(dashboard.router)
 
 
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start = time.perf_counter()
+    response = await call_next(request)
+    elapsed_ms = (time.perf_counter() - start) * 1000
+    log.info(
+        "%s %s %s  %.1fms  client=%s",
+        request.method,
+        request.url.path,
+        response.status_code,
+        elapsed_ms,
+        request.client.host if request.client else "-",
+    )
+    return response
+
+
 @app.get("/", tags=["health"])
 def root():
+    log.info("Health check called")
     return {"status": "ok", "message": "Agribathi Order API is running"}

@@ -6,8 +6,10 @@ from database import get_db
 from models import Product, Order, OrderItem
 from schemas import OrderCreate, OrderOut, OrderItemOut, OrderListItem, OrderListResponse
 from config_loader import load_prices
+from logger import get_logger
 
 router = APIRouter(prefix="/orders", tags=["orders"])
+log = get_logger("orders")
 
 
 def _build_order_out(order: Order) -> OrderOut:
@@ -36,6 +38,8 @@ def _build_order_out(order: Order) -> OrderOut:
 
 @router.post("", response_model=OrderOut, status_code=201)
 def create_order(payload: OrderCreate, db: Session = Depends(get_db)):
+    log.info("Creating order for customer='%s' phone='%s' items=%d",
+             payload.customer_name, payload.customer_phone, len(payload.items))
     prices = load_prices()
 
     # Validate and collect products
@@ -47,6 +51,7 @@ def create_order(payload: OrderCreate, db: Session = Depends(get_db)):
             Product.id == item.product_id, Product.is_active == 1
         ).first()
         if not p:
+            log.warning("Order creation failed — product id %d not found", item.product_id)
             raise HTTPException(status_code=422, detail=f"Product id {item.product_id} not found")
         product_map[item.product_id] = p
 
@@ -78,6 +83,8 @@ def create_order(payload: OrderCreate, db: Session = Depends(get_db)):
     db.add(order)
     db.commit()
     db.refresh(order)
+    log.info("Order created id=%d customer='%s' total=%.2f",
+             order.id, order.customer_name, float(order.total_amount))
     # Eager-load items + products for response
     for oi in order.items:
         _ = oi.product
@@ -142,6 +149,7 @@ def list_orders(
 def get_order(order_id: int, db: Session = Depends(get_db)):
     order = db.query(Order).filter(Order.id == order_id).first()
     if not order:
+        log.warning("Order id=%d not found", order_id)
         raise HTTPException(status_code=404, detail="Order not found")
     for oi in order.items:
         _ = oi.product
@@ -152,6 +160,8 @@ def get_order(order_id: int, db: Session = Depends(get_db)):
 def delete_order(order_id: int, db: Session = Depends(get_db)):
     order = db.query(Order).filter(Order.id == order_id).first()
     if not order:
+        log.warning("Delete failed — order id=%d not found", order_id)
         raise HTTPException(status_code=404, detail="Order not found")
+    log.info("Deleting order id=%d customer='%s'", order.id, order.customer_name)
     db.delete(order)
     db.commit()
